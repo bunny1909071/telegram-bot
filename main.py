@@ -2,7 +2,7 @@ import os
 import requests
 import logging
 from telegram import Update
-from telegram.ext import Application, MessageHandler, filters, ContextTypes
+from telegram.ext import Application, MessageHandler, CommandHandler, filters, ContextTypes
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -27,6 +27,12 @@ def ask_groq(text):
         logger.error(f"Groq error: {e}")
         return "Sorry, error getting response."
 
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user_name = update.effective_user.first_name or "there"
+    await update.message.reply_text(
+        f"Hello {user_name}! 👋 I'm Joshua AI, you can ask me anything!"
+    )
+
 async def handle(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_text = update.message.text
     logger.info(f"Message: {user_text}")
@@ -34,6 +40,8 @@ async def handle(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(reply)
 
 app = Application.builder().token(TELEGRAM_TOKEN).build()
+app.add_handler(CommandHandler("start", start))
 app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle))
+
 logger.info("Bot running...")
 app.run_polling()
