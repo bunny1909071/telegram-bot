@@ -30,7 +30,7 @@ def ask_groq(text):
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_name = update.effective_user.first_name or "there"
     await update.message.reply_text(
-        f"Hello {user_name}! 👋 I'm Joshua AI, you can ask me anything!"
+        f"Hello {user_name}! 👋 I'm Jashua AI, you can ask me anything! I can help you with your studies "
     )
 
 async def handle(update: Update, context: ContextTypes.DEFAULT_TYPE):
